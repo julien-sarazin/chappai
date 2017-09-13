@@ -35,9 +35,12 @@ describe('AuthorizationResolver', () => {
     describe('resolve', () => {
         describe('when a request has to be resolved, with an header without the authorization key', () => {
             it('should fulfill a promise without resolving the authorization', () => {
-                const registry = { next: () => {} };
-                const options = { realm: 'realm', path: 'path' };
-                const request = { headers: {} };
+                const registry = {
+                    next: () => {
+                    }
+                };
+                const options = {realm: 'realm', path: 'path'};
+                const request = {headers: {}};
 
                 const mock = sinon.mock(registry);
                 mock.expects('next').never();
@@ -53,10 +56,16 @@ describe('AuthorizationResolver', () => {
 
         describe('when a request has to be resolved, with an header with the authorization key', () => {
             it('should fulfill a promise by resolving the authorization', () => {
-                const registry = { next: () => {} };
-                const instance = { request: () => {} };
-                const options = { realm: 'realm', path: 'path' };
-                const request = { headers: { authorization: 'xxx' } };
+                const registry = {
+                    next: () => {
+                    }
+                };
+                const instance = {
+                    request: () => {
+                    }
+                };
+                const options = {realm: 'realm', path: 'path'};
+                const request = {headers: {authorization: 'xxx'}};
 
                 const registry_mock = sinon.mock(registry);
                 const instance_mock = sinon.mock(instance);
@@ -80,10 +89,6 @@ describe('AuthorizationResolver', () => {
                     .should.be.fulfilled;
             });
         });
-    });
-
-    describe('proxy', () => {
-
     });
 });
 
