@@ -45,7 +45,7 @@ class AuthorizationResolver {
         return self.registry
             .next({ realm: this.options.realm })
             .then(makeRequest)
-            .then(parseResponse)
+            .then(parseResponse);
 
         function makeRequest(instance) {
             const request_options = {
