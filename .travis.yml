@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "8.4.0"
+
+install:
+- npm install
+
+after_success:
+  - npm install -g istanbul
+  - npm run coverage
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < coverage/lcov.info

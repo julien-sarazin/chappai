@@ -1,0 +1,71 @@
+{
+    "name": "chappai",
+    "version": "1.0.0",
+    "description": "A standalone gateway for micro-service architecture",
+    "main": "index.js",
+    "dependencies": {
+        "bluebird": "^3.5.0",
+        "body-parser": "^1.18.1",
+        "express": "^4.15.4",
+        "idylle": "^2.0.10",
+        "lodash": "^4.17.4",
+        "mongoose": "^4.11.11",
+        "morgan": "^1.8.2",
+        "yemma": "^1.0.10",
+        "eslint": "^4.6.1",
+        "eslint-config-airbnb": "^15.1.0",
+        "eslint-plugin-import": "^2.7.0",
+        "eslint-plugin-jsx-a11y": "^6.0.2",
+        "eslint-plugin-react": "^7.3.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Digipolitan/chappai.git"
+    },
+    "keywords": [
+        "microservices"
+    ],
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Digipolitan/chappai/issues"
+    },
+    "homepage": "https://github.com/Digipolitan/chappai#readme",
+    "scripts": {
+        "test": "mocha $(find . -name '*.specs.js' ! -ipath '*node_modules*') --timeout 20000 --require ./test",
+        "coverage": "istanbul cover _mocha $(find . -name '*.specs.js' ! -ipath '*node_modules*') --timeout 20000 --require ./test",
+        "start": "node index.js",
+        "lint": "eslint ."
+    },
+    "eslintConfig": {
+        "extends": "airbnb",
+        "rules": {
+            "indent": [
+                2,
+                4
+            ],
+            "arrow-parens":"off",
+            "no-multi-spaces": "off",
+            "jsx-a11y/href-no-hash": "off",
+            "camelcase": "off",
+            "no-use-before-define": "off",
+            "no-underscore-dangle": "off",
+            "max-len": "off",
+            "no-undef": "off",
+            "new-cap": "off",
+            "curly": "off",
+            "no-confusing-arrow": "off",
+            "no-trailing-spaces": "off",
+            "comma-dangle": "off",
+            "no-param-reassign": "off",
+            "func-names": [
+                "error",
+                "never"
+            ],
+            "no-return-assign": "off",
+            "global-require": "off",
+            "no-shadow": "warn",
+            "no-unused-vars": "warn"
+        }
+    }
+}

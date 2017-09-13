@@ -1,0 +1,7 @@
+{
+    "authorization": {
+        "realm": "$AUTH_REALM",
+        "path": "$AUTH_PATH",
+        "header": "$AUTH_HEADER"
+    }
+}

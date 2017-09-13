@@ -1,0 +1,7 @@
+{
+    "port": 8080,
+    "logger": {
+        "level": "tiny"
+    },
+    "body_limit": "2mb"
+}
