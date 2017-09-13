@@ -45,7 +45,7 @@ class AuthorizationResolver {
         return self.registry
             .next({ realm: this.options.realm })
             .then(makeRequest)
-            .then(parseResponse);
+            .then(parseResponse)
 
         function makeRequest(instance) {
             const request_options = {
@@ -83,10 +83,7 @@ class AuthorizationResolver {
                 .resolve(req)
                 .then(dispatch)
                 .then(data => res.send(data))
-                .catch((err) => {
-                    console.error(err);
-                    return res.status(err.code || err.statusCode).send({ reason: err.reason || err.error || err.message });
-                });
+                .catch(err => res.status(err.code || err.statusCode).send({ reason: err.reason || err.error || err.message });
 
             function dispatch(authorization) {
                 return self.registry
