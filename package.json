@@ -18,7 +18,8 @@
         "lodash": "^4.17.4",
         "mongoose": "^4.11.11",
         "morgan": "^1.8.2",
-        "yemma": "^1.0.10"
+        "sinon": "^3.2.1",
+        "yemma": "^1.1.0"
     },
     "repository": {
         "type": "git",

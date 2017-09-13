@@ -1,10 +1,5 @@
 const _ = require('lodash');
 
-class InvalidRegistryError extends Error {
-}
-
-class InvalidResolverOptionsError extends Error {
-}
 
 /**
  * Authorization Resolver is used to solve the problem of authorization
@@ -23,13 +18,15 @@ class AuthorizationResolver {
      */
     constructor(registry, options) {
         if (!registry)
-            throw new InvalidRegistryError();
+            throw new Error('InvalidRegistryError');
 
-        if (!options || typeof options !== 'object' || (!options.realm || !options.path || !options.header))
-            throw new InvalidResolverOptionsError();
+        if (!options || typeof options !== 'object' || (!options.realm || !options.path))
+            throw new Error('InvalidResolverOptionsError');
 
-        options.method = options.method || 'GET';
         this.options = options;
+        options.method = options.method || 'GET';
+        options.header = options.header || 'authorization';
+
         this.registry = registry;
     }
 
@@ -45,7 +42,7 @@ class AuthorizationResolver {
         if (!authorization)
             return Promise.resolve();
 
-        return self.registry.dispatcher
+        return self.registry
             .next({ realm: this.options.realm })
             .then(makeRequest)
             .then(parseResponse);
@@ -92,7 +89,7 @@ class AuthorizationResolver {
                 });
 
             function dispatch(authorization) {
-                return self.registry.dispatcher
+                return self.registry
                     .next({ realm, _id: { $nin: ids } })
                     .then(makeRequest)
                     .then(parseResponse)
