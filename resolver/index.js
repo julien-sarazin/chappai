@@ -1,4 +1,4 @@
-const registry = require('yemma');
+const YemmaDiscovery = require('yemma-discovery');
 const AuthorizationResolver = require('./AuthorizationResolver');
 
 module.exports = app => init(app);
@@ -9,9 +9,7 @@ function init(app) {
 }
 
 function init_registry(app) {
-    app.registry = registry;
-    registry.on(registry.events.started, instance => console.log('Registry started on port', instance.settings.port));
-    registry.start();
+    app.registry = new YemmaDiscovery({ heartBeat: false });
 }
 
 function init_resolver(app) {

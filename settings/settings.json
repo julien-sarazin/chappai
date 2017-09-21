@@ -1,5 +1,5 @@
 {
-    "port": 8080,
+    "port": "$PORT",
     "logger": {
         "level": "tiny"
     },

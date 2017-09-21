@@ -1,6 +1,5 @@
 const _ = require('lodash');
 
-
 /**
  * Authorization Resolver is used to solve the problem of authorization
  * in a micro-service architecture. Basically, when an endpoint needs to ensure a user
@@ -83,7 +82,14 @@ class AuthorizationResolver {
                 .resolve(req)
                 .then(dispatch)
                 .then(data => res.send(data))
-                .catch(err => res.status(err.code || err.statusCode).send({ reason: err.reason || err.error || err.message }));
+                .catch(response => {
+                    const reason = serializeError();
+                    res.status(response.code || response.statusCode).send(reason);
+
+                    function serializeError() {
+                        return { reason: response.reason || (response.error && response.error.reason) || response.error || response.message };
+                    }
+                });
 
             function dispatch(authorization) {
                 return self.registry
