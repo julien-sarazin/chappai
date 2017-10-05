@@ -44,10 +44,7 @@
     "eslintConfig": {
         "extends": "airbnb",
         "rules": {
-            "indent": [
-                2,
-                4
-            ],
+            "indent":"off",
             "arrow-parens": "off",
             "no-multi-spaces": "off",
             "jsx-a11y/href-no-hash": "off",

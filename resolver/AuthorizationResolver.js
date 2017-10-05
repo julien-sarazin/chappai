@@ -42,7 +42,7 @@ class AuthorizationResolver {
             return Promise.resolve();
 
         return self.registry
-            .next({realm: this.options.realm})
+            .next({ realm: this.options.realm })
             .then(makeRequest)
             .then(parseResponse);
 
@@ -90,16 +90,16 @@ class AuthorizationResolver {
                 })
                 .catch(response => {
                     const reason = serializeError();
-                    res.status(response.code || response.statusCode).send(reason);
+                    res.status(response.code || response.statusCode || 500).send(reason);
 
                     function serializeError() {
-                        return {reason: response.reason || (response.error && response.error.reason) || response.error || response.message};
+                        return { reason: response.reason || (response.error && response.error.reason) || response.error || response.message };
                     }
                 });
 
             function dispatch(authorization) {
                 return self.registry
-                    .next({realm, _id: {$nin: ids}})
+                    .next({ realm, _id: { $nin: ids } })
                     .then(makeRequest)
                     .then(parseResponse)
                     .catch(dispatchOnRequestErrors);
@@ -153,7 +153,7 @@ class AuthorizationResolver {
                         'EPIPE'
                     ];
 
-                    return (error.cause && SYSTEM_ERRORS.some(ERR => error.cause.code === ERR)) ? dispatch() : Promise.reject(error);
+                    return (error.cause && SYSTEM_ERRORS.some(ERR => error.cause.code === ERR)) ? dispatch(authorization) : Promise.reject(error);
                 }
             }
         };

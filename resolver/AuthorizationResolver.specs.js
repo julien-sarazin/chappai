@@ -35,7 +35,10 @@ describe('AuthorizationResolver', () => {
     describe('resolve', () => {
         describe('when a request has to be resolved, with an header without the authorization key', () => {
             it('should fulfill a promise without resolving the authorization', () => {
-                const registry = { next: () => {} };
+                const registry = {
+                    next: () => {
+                    }
+                };
                 const options = { realm: 'realm', path: 'path' };
                 const request = { headers: {} };
 
@@ -55,8 +58,14 @@ describe('AuthorizationResolver', () => {
 
         describe('when a request has to be resolved, with an header with the authorization key', () => {
             it('should fulfill a promise by resolving the authorization', () => {
-                const registry = { next: () => {} };
-                const instance = { request: () => {} };
+                const registry = {
+                    next: () => {
+                    }
+                };
+                const instance = {
+                    request: () => {
+                    }
+                };
                 const options = { realm: 'realm', path: 'path' };
                 const request = { headers: { authorization: 'xxx' } };
 
@@ -89,13 +98,21 @@ describe('AuthorizationResolver', () => {
     describe('proxy', () => {
         describe('when a request has to be proxy with an authorization header', () => {
             it('should resolve the authorization header by the authorization service, with the proper realm, and path', () => {
-                const registry = { next: () => {} };
-                const instance = { request: () => {} };
+                const registry = {
+                    next: () => {
+                    }
+                };
+                const instance = {
+                    request: () => {
+                    }
+                };
                 const options = { realm: 'realm', path: 'path' };
                 const request = { originalUrl: '/test/path/component', headers: { authorization: 'xxx' } };
                 const response = {
-                    status: () => {},
-                    send: () => {}
+                    status: () => {
+                    },
+                    send: () => {
+                    }
                 };
                 const sut = new AuthorizationResolver(registry, options);
 
