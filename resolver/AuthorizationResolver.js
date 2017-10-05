@@ -42,7 +42,7 @@ class AuthorizationResolver {
             return Promise.resolve();
 
         return self.registry
-            .next({ realm: this.options.realm })
+            .next({realm: this.options.realm})
             .then(makeRequest)
             .then(parseResponse);
 
@@ -81,19 +81,25 @@ class AuthorizationResolver {
             return self
                 .resolve(req)
                 .then(dispatch)
-                .then(data => res.send(data))
+                .then(data => {
+                    data = typeof data === 'number'
+                        ? data.toString()
+                        : data;
+
+                    res.send(data);
+                })
                 .catch(response => {
                     const reason = serializeError();
                     res.status(response.code || response.statusCode).send(reason);
 
                     function serializeError() {
-                        return { reason: response.reason || (response.error && response.error.reason) || response.error || response.message };
+                        return {reason: response.reason || (response.error && response.error.reason) || response.error || response.message};
                     }
                 });
 
             function dispatch(authorization) {
                 return self.registry
-                    .next({ realm, _id: { $nin: ids } })
+                    .next({realm, _id: {$nin: ids}})
                     .then(makeRequest)
                     .then(parseResponse)
                     .catch(dispatchOnRequestErrors);
@@ -114,17 +120,17 @@ class AuthorizationResolver {
                     if (!_.isEmpty(req.body)) {
                         const content_type = req.header('content-type');
                         switch (content_type) {
-                        case 'application/json':
-                            options.body = JSON.parse(req.body);
-                            break;
+                            case 'application/json':
+                                options.body = JSON.parse(req.body);
+                                break;
 
-                        case 'text/plain':
-                        case 'text/html':
-                            options.body = req.body.toString();
-                            break;
+                            case 'text/plain':
+                            case 'text/html':
+                                options.body = req.body.toString();
+                                break;
 
-                        default:
-                            options.body = req.body;
+                            default:
+                                options.body = req.body;
                         }
                     }
 
