@@ -105,7 +105,7 @@ class AuthorizationResolver {
                     .catch(dispatchOnRequestErrors);
 
                 function makeRequest(instance) {
-                    ids.push(instance._id);
+                    ids.push(instance.id);
 
                     const options = {
                         method: req.method,
