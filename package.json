@@ -1,6 +1,6 @@
 {
     "name": "chappai",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "description": "A standalone gateway for micro-service architecture",
     "main": "index.js",
     "dependencies": {
@@ -20,7 +20,7 @@
         "morgan": "^1.8.2",
         "sinon": "^3.2.1",
         "yemma": "^1.1.0",
-        "yemma-discovery": "^1.0.0"
+        "yemma-discovery": "1.4.2"
     },
     "repository": {
         "type": "git",
