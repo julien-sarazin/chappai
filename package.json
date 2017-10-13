@@ -1,6 +1,6 @@
 {
     "name": "chappai",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "A standalone gateway for micro-service architecture",
     "main": "index.js",
     "dependencies": {
