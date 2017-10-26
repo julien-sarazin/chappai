@@ -138,7 +138,7 @@ class AuthorizationResolver {
                 }
 
                 function parseResponse(response) {
-                    res.headers = response.headers;
+                    res.set(response.headers);
                     res.statusCode = response.statusCode;
 
                     return response.body;
