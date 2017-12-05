@@ -15,6 +15,3 @@ chappai.on(Core.events.init.middlewares,    app => {});
 chappai.on(Core.events.init.boot,           app => {});
 
 module.exports = chappai;
-
-chappai.on(Core.events.started, () => console.log('chappai started.'));
-chappai.start();
