@@ -118,7 +118,12 @@ class AuthorizationResolver {
                     delete options.headers['content-length'];
 
                     if (!_.isEmpty(req.body)) {
-                        const content_type = req.header('content-type');
+                        let content_type = req.header('content-type');
+                        const separator_index = content_type.indexOf(';');
+
+                        if (separator_index !== -1)
+                            content_type = content_type.substring(0, separator_index);
+
                         switch (content_type) {
                             case 'application/json':
                                 options.body = JSON.parse(req.body);
