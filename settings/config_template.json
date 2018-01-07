@@ -3,5 +3,10 @@
         "realm": "$AUTH_REALM",
         "path": "$AUTH_PATH",
         "header": "$AUTH_HEADER"
+    },
+    "access": {
+        "realm": "$ACCESS_REALM?",
+        "path": "$ACCESS_PATH?",
+        "method": "POST"
     }
 }

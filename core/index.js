@@ -1,5 +1,5 @@
 const YemmaDiscovery = require('yemma-discovery');
-const AuthorizationResolver = require('./AuthorizationResolver');
+const Resolver = require('./Resolver');
 
 module.exports = app => init(app);
 
@@ -13,5 +13,5 @@ function init_registry(app) {
 }
 
 function init_resolver(app) {
-    app.resolver = new AuthorizationResolver(app.registry, app.settings.authorization);
+    app.resolver = new Resolver(app.registry, app.settings);
 }

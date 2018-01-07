@@ -36,7 +36,7 @@
     },
     "homepage": "https://github.com/Digipolitan/chappai#readme",
     "scripts": {
-        "test": "mocha $(find . -name '*.specs.js' ! -ipath '*node_modules*') --timeout 20000 --require ./test",
+        "test": "mocha $(find . -name '*.specs.js' ! -ipath '*node_modules*') --timeout 20000 --require ./test/requirements.js",
         "coverage": "istanbul cover _mocha $(find . -name '*.specs.js' ! -ipath '*node_modules*') --timeout 20000 --require ./test",
         "start": "node index.js",
         "lint": "eslint ."

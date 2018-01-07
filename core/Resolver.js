@@ -1,15 +1,27 @@
 const _ = require('lodash');
 
 /**
- * Authorization Resolver is used to solve the problem of authorization
+ * > a Gateway is used to solve the problem of authentication
  * in a micro-service architecture. Basically, when an endpoint needs to ensure a user
  * is connected before validating the access, an authentication service should be in charge.
  *
  * The generic part regarding this issue can be configured to let the resolver
- * communicating the authorization token (generally using jwt) to the authorization service. Then the authorization
- * service decrypt this token, and replace it by the information related to the user itself or reject it.
+ * communicating with the Authentication token (generally using jwt) to the Authentication service. Then the authentication
+ * service decrypt this token (via the technology it used to crypt it), and replace it by the information related to the user itself or reject it.
+ *
+ * ---
+ *
+ * > It is also used to solve the problem of ACL in a micro-service architecture.
+ * Basically, when an endpoint needs to ensure the issuer is allowed to execute the piece of code.
+ * For example:
+ *      - is the issuer member of the group related to the business logic?
+ *      - has the issuer a valid subscription level to "                "?
+ *
+ * Few mandatory information are needed as :
+ *      - the list of the secured endpoints
+ *      - a resolver for each secured endpoints
  */
-class AuthorizationResolver {
+class Resolver {
     /**
      *
      * @param registry the registry, responsible for managing instances related to realms.
@@ -19,13 +31,10 @@ class AuthorizationResolver {
         if (!registry)
             throw new Error('InvalidRegistryError');
 
-        if (!options || typeof options !== 'object' || (!options.realm || !options.path))
+        if (!options || typeof options !== 'object' || (!options.authorization.realm || !options.authorization.path || !options.authorization.header))
             throw new Error('InvalidResolverOptionsError');
 
         this.options = options;
-        options.method = options.method || 'GET';
-        options.header = options.header || 'authorization';
-
         this.registry = registry;
     }
 
@@ -34,26 +43,26 @@ class AuthorizationResolver {
      * @param request
      * @return {Promise.<T>}
      */
-    resolve(request) {
+    resolveAuthorization(request) {
         const self = this;
-        const authorization = request.headers[this.options.header];
+        const authentication = request.headers[self.options.authorization.header];
 
-        if (!authorization)
+        if (!authentication)
             return Promise.resolve();
 
         return self.registry
-            .next({ realm: this.options.realm })
+            .next({ realm: self.options.authorization.realm })
             .then(makeRequest)
             .then(parseResponse);
 
         function makeRequest(instance) {
             const request_options = {
-                method: self.options.method,
+                method: self.options.authorization.method,
                 headers: {}
             };
 
-            request_options.headers[self.options.header] = authorization;
-            return instance.request(self.options.path, request_options);
+            request_options.headers[self.options.authorization.header] = authentication;
+            return instance.request(self.options.authorization.path, request_options);
         }
 
         function parseResponse(data) {
@@ -63,6 +72,35 @@ class AuthorizationResolver {
                 return data;
             }
         }
+    }
+
+    resolveAccess(request, authentication) {
+        const self = this;
+
+        if (!self.options.access || !self.options.access.realm || !self.options.access.path)
+            return Promise.resolve(authentication);
+
+        return self.registry
+            .next({ realm: self.options.access.realm })
+            .then(makeRequest);
+
+        function makeRequest(instance) {
+            const request_options = {
+                method: request.method,
+                headers: {}
+            };
+
+            request_options.headers[self.options.authorization.header] = authentication;
+
+            return instance
+                .request(request.originalUrl, request_options)
+                .then(() => authentication);
+        }
+    }
+
+    resolve(request) {
+        return this.resolveAuthorization(request)
+            .then(this.resolveAccess.bind(this, request));
     }
 
     /**
@@ -97,7 +135,7 @@ class AuthorizationResolver {
                     }
                 });
 
-            function dispatch(authorization) {
+            function dispatch(authentication) {
                 return self.registry
                     .next({ realm, _id: { $nin: ids } })
                     .then(makeRequest)
@@ -113,7 +151,7 @@ class AuthorizationResolver {
                         headers: req.headers
                     };
 
-                    options.headers[self.options.header] = authorization;
+                    options.headers[self.options.authorization.header] = authentication;
 
                     delete options.headers['content-length'];
 
@@ -158,11 +196,11 @@ class AuthorizationResolver {
                         'EPIPE'
                     ];
 
-                    return (error.cause && SYSTEM_ERRORS.some(ERR => error.cause.code === ERR)) ? dispatch(authorization) : Promise.reject(error);
+                    return (error.cause && SYSTEM_ERRORS.some(ERR => error.cause.code === ERR)) ? dispatch(authentication) : Promise.reject(error);
                 }
             }
         };
     }
 }
 
-module.exports = AuthorizationResolver;
+module.exports = Resolver;

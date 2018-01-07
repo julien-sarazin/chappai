@@ -4,7 +4,7 @@ module.exports = (settings) => {
     _.merge(
         settings,
         require('./settings.json'),
-        require('./authorization.json')
+        require('./config_template.json')
     );
 
     loadFromEnv(settings);
@@ -18,9 +18,17 @@ module.exports = (settings) => {
                 return loadFromEnv(settings[property]);
 
             if (typeof settings[property] === 'string' && settings[property].startsWith('$')) {
-                const setting = process.env[settings[property].slice(1)];
-                if (!setting)
-                    throw new Error(`missing env property: ${settings[property].slice(1)}`);
+                const key = (settings[property].endsWith('?'))
+                    ? settings[property].slice(1).slice(0, -1)
+                    : settings[property].slice(1);
+
+                const setting = process.env[key];
+
+                if (!setting && !settings[property].endsWith('?'))
+                    throw new Error(`missing env property: ${key}`);
+
+                if (!settings && settings[property].endsWith('?'))
+                    delete settings[property];
 
                 settings[property] = setting;
             }

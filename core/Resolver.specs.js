@@ -1,28 +1,26 @@
 const sinon = require('sinon');
-const AuthorizationResolver = require('./AuthorizationResolver');
+const Resolver = require('./Resolver');
 
 
-describe('AuthorizationResolver', () => {
-
+describe('Resolver', () => {
     describe('constructor()', () => {
         describe('when no registry is passed', () => {
             it('should throw an InvalidRegistryError', () => {
                 function throwable() {
-                    return new AuthorizationResolver();
+                    return new Resolver();
                 }
 
                 throwable
                     .should
                     .throw('InvalidRegistryError');
             });
-
         });
 
         describe('when no options are passed', () => {
             it('should throw an InvalidResolverOptionsError', () => {
                 function throwable() {
                     const registryCollaborator = {};
-                    return new AuthorizationResolver(registryCollaborator);
+                    return new Resolver(registryCollaborator);
                 }
 
                 throwable
@@ -39,7 +37,7 @@ describe('AuthorizationResolver', () => {
                     next: () => {
                     }
                 };
-                const options = { realm: 'realm', path: 'path' };
+                const options = { authorization: { realm: 'realm', path: 'path', header: 'authorization' } };
                 const request = { headers: {} };
 
                 const mock = sinon.mock(registry);
@@ -47,7 +45,7 @@ describe('AuthorizationResolver', () => {
                     .expects('next')
                     .never();
 
-                const sut = new AuthorizationResolver(registry, options);
+                const sut = new Resolver(registry, options);
 
                 return sut
                     .resolve(request)
@@ -66,7 +64,7 @@ describe('AuthorizationResolver', () => {
                     request: () => {
                     }
                 };
-                const options = { realm: 'realm', path: 'path' };
+                const options = { authorization: { realm: 'realm', path: 'path', header: 'authorization' } };
                 const request = { headers: { authorization: 'xxx' } };
 
                 const registry_mock = sinon.mock(registry);
@@ -82,7 +80,7 @@ describe('AuthorizationResolver', () => {
                     .once()
                     .returns('abc');
 
-                const sut = new AuthorizationResolver(registry, options);
+                const sut = new Resolver(registry, options);
 
                 return sut
                     .resolve(request)
@@ -106,7 +104,7 @@ describe('AuthorizationResolver', () => {
                     request: () => {
                     }
                 };
-                const options = { realm: 'realm', path: 'path' };
+                const options = { authorization: { realm: 'realm', path: 'path', header: 'authorization' } };
                 const request = { originalUrl: '/test/path/component', headers: { authorization: 'xxx' } };
                 const response = {
                     status: () => {
@@ -114,7 +112,7 @@ describe('AuthorizationResolver', () => {
                     send: () => {
                     }
                 };
-                const sut = new AuthorizationResolver(registry, options);
+                const sut = new Resolver(registry, options);
 
                 const registry_mock = sinon.mock(registry);
                 const instance_mock = sinon.mock(instance);
