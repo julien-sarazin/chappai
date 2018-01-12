@@ -39,9 +39,12 @@ Feel free to checkout this project documentation to know more about the registry
  export YEMMA_DB_URI=mongodb://localhost:27017/yemma
  export YEMMA_PORT=9000
  export PORT=6473
+ # Mandatory(*) For Authentication part
  export AUTH_REALM=auth
  export AUTH_PATH=/api/v1/users/profile
  export AUTH_HEADER=authorization
+ # Optional(*) For Access Control part
+ export ACCESS_REALM=access
 ```
 
 
