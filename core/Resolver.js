@@ -77,7 +77,7 @@ class Resolver {
     resolveAccess(request, authentication) {
         const self = this;
 
-        if (!self.options.access || !self.options.access.realm || !self.options.access.path)
+        if (!self.options.access || !self.options.access.realm)
             return Promise.resolve(authentication);
 
         return self.registry
