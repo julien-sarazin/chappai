@@ -21,6 +21,7 @@ const _ = require('lodash');
  *      - the list of the secured endpoints
  *      - a resolver for each secured endpoints
  */
+// Todo: Check if request.Body inspection is necessary..
 class Resolver {
     /**
      *
@@ -87,7 +88,8 @@ class Resolver {
         function makeRequest(instance) {
             const request_options = {
                 method: request.method,
-                headers: {}
+                headers: {},
+                body: self._serializeBody(request)
             };
 
             request_options.headers[self.options.authorization.header] = authentication;
@@ -154,28 +156,8 @@ class Resolver {
                     options.headers[self.options.authorization.header] = authentication;
 
                     delete options.headers['content-length'];
-
-                    if (!_.isEmpty(req.body)) {
-                        let content_type = req.header('content-type');
-                        const separator_index = content_type.indexOf(';');
-
-                        if (separator_index !== -1)
-                            content_type = content_type.substring(0, separator_index);
-
-                        switch (content_type) {
-                            case 'application/json':
-                                options.body = JSON.parse(req.body);
-                                break;
-
-                            case 'text/plain':
-                            case 'text/html':
-                                options.body = req.body.toString();
-                                break;
-
-                            default:
-                                options.body = req.body;
-                        }
-                    }
+                    if (!_.isEmpty(req.body))
+                        options.body = self._serializeBody(req);
 
                     return instance.request(targeted_path, options);
                 }
@@ -200,6 +182,26 @@ class Resolver {
                 }
             }
         };
+    }
+
+    _serializeBody(request) {
+        let content_type = request.header('content-type');
+        const separator_index = content_type.indexOf(';');
+
+        if (separator_index !== -1)
+            content_type = content_type.substring(0, separator_index);
+
+        switch (content_type) {
+            case 'application/json':
+                return JSON.parse(request.body);
+
+            case 'text/plain':
+            case 'text/html':
+                return request.body.toString();
+
+            default:
+                return request.body;
+        }
     }
 }
 
