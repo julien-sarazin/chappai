@@ -187,7 +187,7 @@ class Resolver {
     _serializeBody(request) {
         let content_type = request.header('content-type');
         if (!content_type || !request.body)
-            return null;
+            return request.body;
 
         const separator_index = content_type.indexOf(';');
 
