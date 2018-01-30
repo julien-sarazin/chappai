@@ -89,10 +89,13 @@ class Resolver {
             const request_options = {
                 method: request.method,
                 headers: {},
-                body: self._serializeBody(request)
             };
 
             request_options.headers[self.options.authorization.header] = authentication;
+
+            delete request_options.headers['content-length'];
+            if (!_.isEmpty(request.body))
+                request_options.body = self._serializeBody(request);
 
             return instance
                 .request(request.originalUrl, request_options)
@@ -187,7 +190,7 @@ class Resolver {
     _serializeBody(request) {
         let content_type = request.header('content-type');
         if (!content_type || !request.body)
-            return null;
+            return request.body;
 
         const separator_index = content_type.indexOf(';');
 
