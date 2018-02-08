@@ -35,6 +35,9 @@ class Resolver {
         if (!options || typeof options !== 'object' || (!options.authorization.realm || !options.authorization.path || !options.authorization.header))
             throw new Error('InvalidResolverOptionsError');
 
+        if (!responseHandler && !errorHandler)
+            throw new Error('MissingHandlersError');
+
         this.responseHandler = responseHandler;
         this.errorHandler = errorHandler;
         this.options = options;

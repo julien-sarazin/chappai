@@ -28,9 +28,27 @@ describe('Resolver', () => {
                     .throw('InvalidResolverOptionsError');
             });
         });
+
+        describe('when no handlers are passed', () => {
+            it('should throw an MissingHandlersError', () => {
+                function throwable() {
+                    const registry = {
+                        next: () => {
+                        }
+                    };
+                    const options = { authorization: { realm: 'realm', path: 'path', header: 'authorization' } };
+
+                    return new Resolver(registry, options);
+                }
+
+                throwable
+                    .should
+                    .throw('MissingHandlersError');
+            });
+        });
     });
 
-    describe('resolve', () => {
+    describe('.resolve()', () => {
         describe('when a request has to be resolved, with an header without the authorization key', () => {
             it('should fulfill a promise without resolving the authorization', () => {
                 const registry = {
@@ -45,7 +63,8 @@ describe('Resolver', () => {
                     .expects('next')
                     .never();
 
-                const sut = new Resolver(registry, options);
+                const handler = () => Promise.resolve();
+                const sut = new Resolver(registry, options, handler, handler);
 
                 return sut
                     .resolve(request)
@@ -70,6 +89,8 @@ describe('Resolver', () => {
                 const registry_mock = sinon.mock(registry);
                 const instance_mock = sinon.mock(instance);
 
+                const handler = () => Promise.resolve();
+
                 registry_mock
                     .expects('next')
                     .once()
@@ -80,7 +101,7 @@ describe('Resolver', () => {
                     .once()
                     .returns('abc');
 
-                const sut = new Resolver(registry, options);
+                const sut = new Resolver(registry, options, handler, handler);
 
                 return sut
                     .resolve(request)
@@ -93,7 +114,7 @@ describe('Resolver', () => {
         });
     });
 
-    describe('proxy', () => {
+    describe('.proxy()', () => {
         describe('when a request has to be proxy with an authorization header', () => {
             it('should resolve the authorization header by the authorization service, with the proper realm, and path', () => {
                 const registry = {
@@ -105,18 +126,13 @@ describe('Resolver', () => {
                     }
                 };
                 const options = { authorization: { realm: 'realm', path: 'path', header: 'authorization' } };
+                const handler = () => {};
                 const request = { originalUrl: '/test/path/component', headers: { authorization: 'xxx' } };
-                const response = {
-                    status: () => {
-                    },
-                    send: () => {
-                    }
-                };
-                const sut = new Resolver(registry, options);
+
+                const sut = new Resolver(registry, options, handler, handler);
 
                 const registry_mock = sinon.mock(registry);
                 const instance_mock = sinon.mock(instance);
-                const response_mock = sinon.mock(response);
                 const sut_mock = sinon.mock(sut);
 
                 sut_mock
@@ -139,19 +155,10 @@ describe('Resolver', () => {
                         resolveWithFullResponse: true
                     });
 
-                response_mock
-                    .expects('send')
-                    .once();
-
-                response_mock
-                    .expects('status')
-                    .returns(response);
-
-                return sut.proxy()(request, response)
+                return sut.proxy()(request)
                     .then(() => {
                         registry_mock.verify();
                         instance_mock.verify();
-                        response_mock.verify();
                         sut_mock.verify();
                     })
                     .should.be.fulfilled;
