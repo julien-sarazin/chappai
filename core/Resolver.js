@@ -28,13 +28,15 @@ class Resolver {
      * @param registry the registry, responsible for managing instances related to realms.
      * @param options mandatory options containing the realm identifier, the path and the header key.
      */
-    constructor(registry, options) {
+    constructor(registry, options, responseHandler, errorHandler) {
         if (!registry)
             throw new Error('InvalidRegistryError');
 
         if (!options || typeof options !== 'object' || (!options.authorization.realm || !options.authorization.path || !options.authorization.header))
             throw new Error('InvalidResolverOptionsError');
 
+        this.responseHandler = responseHandler;
+        this.errorHandler = errorHandler;
         this.options = options;
         this.registry = registry;
     }
@@ -124,21 +126,8 @@ class Resolver {
             return self
                 .resolve(req)
                 .then(dispatch)
-                .then(data => {
-                    data = typeof data === 'number'
-                        ? data.toString()
-                        : data;
-
-                    res.send(data);
-                })
-                .catch(response => {
-                    const reason = serializeError();
-                    res.status(response.code || response.statusCode || 500).send(reason);
-
-                    function serializeError() {
-                        return { reason: response.reason || (response.error && response.error.reason) || response.error || response.message };
-                    }
-                });
+                .then(response => self.responseHandler(req, res, {}, response))
+                .catch(error => self.errorHandler(req, res, error));
 
             function dispatch(authentication) {
                 return self.registry

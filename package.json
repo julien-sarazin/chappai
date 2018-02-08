@@ -1,26 +1,17 @@
 {
     "name": "chappai",
-    "version": "1.4.6",
+    "version": "1.5.0",
     "description": "A standalone gateway for micro-service architecture",
     "main": "index.js",
     "dependencies": {
-        "bluebird": "^3.5.0",
-        "body-parser": "^1.18.1",
-        "chai": "^4.1.2",
-        "chai-as-promised": "^7.1.1",
-        "eslint": "^4.6.1",
-        "eslint-config-airbnb": "^15.1.0",
-        "eslint-plugin-import": "^2.7.0",
-        "eslint-plugin-jsx-a11y": "^6.0.2",
-        "eslint-plugin-react": "^7.3.0",
+        "bluebird": "3.5.1",
+        "body-parser": "1.18.2",
+        "chai": "4.1.2",
+        "chai-as-promised": "7.1.1",
         "express": "^4.15.4",
         "idylle": "2.4.1",
-        "lodash": "^4.17.4",
-        "mongoose": "^4.11.11",
-        "morgan": "^1.8.2",
-        "sinon": "^3.2.1",
-        "yemma": "^1.1.0",
-        "yemma-discovery": "1.6.0"
+        "lodash": "4.17.4",
+        "yemma-discovery": "1.9.0"
     },
     "repository": {
         "type": "git",

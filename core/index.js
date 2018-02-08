@@ -13,5 +13,9 @@ function init_registry(app) {
 }
 
 function init_resolver(app) {
-    app.resolver = new Resolver(app.registry, app.settings);
+    app.resolver = new Resolver(
+        app.registry,
+        app.settings,
+        app.responseHandler,
+        app.errorHandler);
 }
