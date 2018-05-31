@@ -11,7 +11,7 @@
         "express": "^4.15.4",
         "idylle": "2.4.1",
         "lodash": "4.17.4",
-        "yemma-discovery": "1.9.0",
+        "yemma-discovery": "1.9.1",
         "sinon": "4.2.2"
     },
     "repository": {
