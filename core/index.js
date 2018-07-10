@@ -9,7 +9,7 @@ function init(app) {
 }
 
 function init_registry(app) {
-    app.registry = new YemmaDiscovery({ heartBeat: false });
+    app.registry = new YemmaDiscovery({ subscribe: false });
 }
 
 function init_resolver(app) {
