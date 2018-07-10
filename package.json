@@ -1,6 +1,6 @@
 {
     "name": "chappai",
-    "version": "1.5.1",
+    "version": "1.6.0",
     "description": "A standalone gateway for micro-service architecture",
     "main": "index.js",
     "dependencies": {
@@ -11,7 +11,7 @@
         "express": "^4.15.4",
         "idylle": "2.4.1",
         "lodash": "4.17.4",
-        "yemma-discovery": "1.9.1",
+        "yemma-discovery": "2.0.0",
         "sinon": "4.2.2"
     },
     "repository": {
@@ -32,33 +32,5 @@
         "coverage": "istanbul cover _mocha $(find . -name '*.specs.js' ! -ipath '*node_modules*') --timeout 20000 --require ./test",
         "start": "node index.js",
         "lint": "eslint ."
-    },
-    "eslintConfig": {
-        "extends": "airbnb",
-        "rules": {
-            "indent": "off",
-            "arrow-parens": "off",
-            "no-multi-spaces": "off",
-            "jsx-a11y/href-no-hash": "off",
-            "camelcase": "off",
-            "no-use-before-define": "off",
-            "no-underscore-dangle": "off",
-            "max-len": "off",
-            "no-undef": "off",
-            "new-cap": "off",
-            "curly": "off",
-            "no-confusing-arrow": "off",
-            "no-trailing-spaces": "off",
-            "comma-dangle": "off",
-            "no-param-reassign": "off",
-            "func-names": [
-                "error",
-                "never"
-            ],
-            "no-return-assign": "off",
-            "global-require": "off",
-            "no-shadow": "warn",
-            "no-unused-vars": "warn"
-        }
     }
 }
