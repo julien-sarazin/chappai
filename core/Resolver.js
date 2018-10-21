@@ -1,5 +1,5 @@
 const _ = require('lodash');
-
+const uuid = require('uuid').v4;
 /**
  * > a Gateway is used to solve the problem of authentication
  * in a micro-service architecture. Basically, when an endpoint needs to ensure a user
@@ -21,7 +21,6 @@ const _ = require('lodash');
  *      - the list of the secured endpoints
  *      - a resolver for each secured endpoints
  */
-// Todo: Check if request.Body inspection is necessary..
 class Resolver {
     /**
      *
@@ -148,6 +147,7 @@ class Resolver {
                         headers: req.headers
                     };
 
+                    options.headers['Custom-Request-Identifier'] = uuid();
                     options.headers[self.options.authorization.header] = authentication;
 
                     delete options.headers['content-length'];
