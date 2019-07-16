@@ -92,12 +92,13 @@ class Resolver {
         function makeRequest(instance) {
             const request_options = {
                 method: request.method,
-                headers: {},
+                headers: request.headers,
             };
 
             request_options.headers[self.options.authorization.header] = authentication;
 
             delete request_options.headers['content-length'];
+
             if (!_.isEmpty(request.body))
                 request_options.body = self._serializeBody(request);
 
